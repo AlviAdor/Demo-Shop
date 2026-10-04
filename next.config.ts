@@ -24,13 +24,16 @@ const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()" },
-  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  ...(isProd ? [{ key: "Cross-Origin-Opener-Policy", value: "same-origin" }] : []), // browsers ignore it over plain http, so only send it in production
   ...(isProd ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" }] : []),
 ];
 
 const nextConfig: NextConfig = {
   agentRules: false,
   reactStrictMode: true,
+  // Lets a phone on the same Wi-Fi use the dev server (http://192.168.x.x:3000). Without this, Next.js refuses the
+  // dev connection from any address other than localhost and the page never becomes interactive. Dev only; no effect in production.
+  allowedDevOrigins: ["192.168.*.*", "10.*.*.*", "172.*.*.*", "*.local"],
   serverExternalPackages: ["better-sqlite3"], // native module, loaded at runtime instead of being bundled
   poweredByHeader: false,
   // Smaller deployable for Docker. Set STANDALONE=1 at build time.
