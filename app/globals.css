@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f1efea;
+  --fg: #0d0d0d;
+  --muted: #6f6b64;
+  --gold: #0d0d0d; /* primary accent is plain ink */
+  --ember: #a8281f;
+  --line: rgba(13, 13, 13, 0.16);
+  --card: #faf9f6;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-gold: var(--gold);
+  --color-ember: var(--ember);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --font-display: var(--font-serif);
+  --font-sans: var(--font-grotesk);
+}
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-grotesk), system-ui, sans-serif; font-size: 14px; letter-spacing: 0.01em; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+::selection { background: var(--fg); color: var(--bg); }
+a, button { cursor: pointer; }
+
+/* Type system: a quiet serif for statements, tiny uppercase grotesk for everything functional. */
+.display { font-family: var(--font-serif), Georgia, serif; font-weight: 400; line-height: 0.98; letter-spacing: -0.02em; text-transform: none; }
+.outline-text { font-style: italic; color: var(--muted); }
+.serif { font-family: var(--font-serif), Georgia, serif; font-style: italic; }
+.micro { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+input, select, textarea { background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 12px 0; width: 100%; color: var(--fg); font: inherit; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--fg); }
+input::placeholder, textarea::placeholder { color: var(--muted); }
+select option { background: var(--bg); }
+input[disabled] { opacity: 0.5; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 15px 28px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--fg); transition: background 0.25s, color 0.25s; }
+.btn-gold { background: var(--fg); color: var(--bg); } .btn-gold:hover { background: transparent; color: var(--fg); }
+.btn-ghost { background: transparent; color: var(--fg); } .btn-ghost:hover { background: var(--fg); color: var(--bg); }
+.btn:disabled { opacity: 0.4; pointer-events: none; }
+.link-u { background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; background-origin: content-box; transition: background-size 0.35s; padding-bottom: 2px; }
+.link-u:hover { background-size: 0 1px; background-position: 100% 100%; }
+
+@keyframes dots { 0%,80%,100% { opacity: .2 } 40% { opacity: 1 } }
+.dot { animation: dots 1.2s infinite; }
+.dot:nth-child(2) { animation-delay: .15s } .dot:nth-child(3) { animation-delay: .3s }
+.no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Keyboard focus is always visible; mouse focus stays quiet. */
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--fg); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; } }
+
+/* ---- Phones ---------------------------------------------------------------- */
+/* iPhones zoom the whole page when a field under 16px is focused, so fields are 16px on small screens. */
+@media (max-width: 767px) {
+  input, select, textarea { font-size: 16px; }
+  body { font-size: 15px; }
+}
+/* Remove the tap delay and the grey tap flash; keep scrolling smooth. */
+a, button, summary, label, select, input { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* A comfortable touch target (44px) around small uppercase links and buttons, without changing how they look. */
+/* In the components layer so Tailwind utilities such as `hidden` and `md:inline-flex` can still override it. */
+@layer components { .tap { display: inline-flex; align-items: center; min-height: 44px; padding-inline: 8px; margin-inline: -8px; } }
+/* Space for the notch and the home indicator on phones that have them. */
+.safe-b { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+.safe-t { padding-top: env(safe-area-inset-top); }
