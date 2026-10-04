@@ -35,6 +35,10 @@ On first start the database is created at `data/alta.db` with the catalogue and,
 
 Payments run against a sandbox gateway, so use a test card such as `4242 4242 4242 4242` with any future expiry and any 3 digit code.
 
+### Trying it on a phone
+
+Put the phone on the same Wi-Fi as the computer and open the **Network** address that `npm run dev` prints, for example `http://192.168.1.20:3000`. The dev server accepts connections from private-network addresses (`192.168.*`, `10.*`, `172.*` and `*.local`) via `allowedDevOrigins` in `next.config.ts`. If you need another address, add it there; without it Next.js refuses the dev connection and the page loads but its buttons do nothing.
+
 ## Project structure
 
 ```
