@@ -16,10 +16,10 @@ const MIGRATIONS: string[] = [
     slug        TEXT NOT NULL UNIQUE,
     name        TEXT NOT NULL,
     category_id TEXT NOT NULL REFERENCES categories(id),
-    price       INTEGER NOT NULL CHECK (price > 0),          -- whole US dollars
+    price       INTEGER NOT NULL CHECK (price > 0),          /* whole US dollars */
     colour      TEXT NOT NULL,
     description TEXT NOT NULL DEFAULT '',
-    details     TEXT NOT NULL DEFAULT '[]',                  -- short JSON list of bullet points
+    details     TEXT NOT NULL DEFAULT '[]',                  /* short JSON list of bullet points */
     active      INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0, 1)),
     sort        INTEGER NOT NULL DEFAULT 0,
     created_at  INTEGER NOT NULL
@@ -41,13 +41,13 @@ const MIGRATIONS: string[] = [
   ) WITHOUT ROWID;
   CREATE INDEX idx_tags_tag ON product_tags (tag);
 
-  -- Stock is tracked per size. One row per sellable variant.
+  /* Stock is tracked per size. One row per sellable variant. */
   CREATE TABLE variants (
     id         INTEGER PRIMARY KEY,
     product_id TEXT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
     size       TEXT NOT NULL,
     sort       INTEGER NOT NULL DEFAULT 0,
-    stock      INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0), -- the database itself refuses to oversell
+    stock      INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0), /* the database itself refuses to oversell */
     UNIQUE (product_id, size)
   );
 
@@ -64,7 +64,7 @@ const MIGRATIONS: string[] = [
   CREATE TABLE orders (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id    TEXT NOT NULL REFERENCES users(id),
-    total      INTEGER NOT NULL,                              -- whole US dollars, for reporting
+    total      INTEGER NOT NULL,                              /* whole US dollars, for reporting */
     status     TEXT NOT NULL CHECK (status IN ('pending', 'paid', 'shipped', 'delivered', 'cancelled')),
     address    TEXT NOT NULL,
     created_at INTEGER NOT NULL,
@@ -73,7 +73,7 @@ const MIGRATIONS: string[] = [
   CREATE INDEX idx_orders_user    ON orders (user_id, created_at DESC);
   CREATE INDEX idx_orders_created ON orders (created_at);
   CREATE INDEX idx_orders_status  ON orders (status, created_at);
-  INSERT INTO sqlite_sequence (name, seq) VALUES ('orders', 1000);  -- order numbers start at 1001
+  INSERT INTO sqlite_sequence (name, seq) VALUES ('orders', 1000);  /* order numbers start at 1001 */
 
   CREATE TABLE order_items (
     id         INTEGER PRIMARY KEY,
@@ -82,7 +82,7 @@ const MIGRATIONS: string[] = [
     variant_id INTEGER REFERENCES variants(id),
     size       TEXT NOT NULL,
     qty        INTEGER NOT NULL CHECK (qty > 0),
-    price      INTEGER NOT NULL                               -- unit price at the time of purchase
+    price      INTEGER NOT NULL                               /* unit price at the time of purchase */
   );
   CREATE INDEX idx_items_order   ON order_items (order_id);
   CREATE INDEX idx_items_product ON order_items (product_id);
@@ -103,10 +103,10 @@ const MIGRATIONS: string[] = [
     pending_last4  TEXT,
     failure        TEXT
   );
-  -- A small partial index covering only unpaid sessions makes the expiry sweep near-instant at any scale.
+  /* A small partial index covering only unpaid sessions makes the expiry sweep near-instant at any scale. */
   CREATE INDEX idx_payments_open ON payments (expires_at) WHERE status = 'requires_payment';
 
-  -- Remembers every processed gateway event so a replayed webhook can never be applied twice.
+  /* Remembers every processed gateway event so a replayed webhook can never be applied twice. */
   CREATE TABLE payment_events (
     event_id    TEXT PRIMARY KEY,
     order_id    INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
