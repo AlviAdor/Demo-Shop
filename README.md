@@ -16,6 +16,26 @@ A demo online shop for showing clients what a modern, well-designed store can lo
 - **Stylist:** an offline, rule-based shopping assistant for recommendations, sizing, stock and order tracking
 - **Mobile:** designed for phones first (details below)
 
+## Demo media
+
+- **Walkthrough video:** [ALTA demo walkthrough](./Screenshots%20and%20Videos/ALTA-demo-walkthrough.mp4)
+
+### Storefront
+
+![Home page](./Screenshots%20and%20Videos/r_home.png)
+![Shop grid](./Screenshots%20and%20Videos/r_shop.png)
+
+### Product page and authentication
+
+![Product details](./Screenshots%20and%20Videos/r_prod.png)
+![Login page](./Screenshots%20and%20Videos/r_login.png)
+
+### Back office
+
+![Admin dashboard](./Screenshots%20and%20Videos/r_admin.png)
+![Inventory management](./Screenshots%20and%20Videos/r_inv.png)
+![Orders management](./Screenshots%20and%20Videos/r_orders.png)
+
 ## Quick start
 
 Requires Node 20.9 or newer.
